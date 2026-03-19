@@ -18,7 +18,11 @@ export const routes: Routes = [
         loadComponent: () => import('./product-form/product-form').then(m => m.ProductForm) 
     },
     { path: 'login', 
-        loadComponent: () => import('./login/login').then(m => m.Login) },
+        loadComponent: () => import('./login/login').then(m => m.Login) 
+    },
+     { path: 'signup', 
+        loadComponent: () => import('./sign-up/sign-up').then(m => m.Signup) 
+    },
     { path: '**', 
         loadComponent: () => import('./notfound/notfound').then(m => m.Notfound) 
     }

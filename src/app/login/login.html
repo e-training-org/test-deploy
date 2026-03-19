@@ -1,4 +1,5 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <input formControlName="email" placeholder="Email" />
   <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
     Valid email required
@@ -14,4 +15,10 @@
   <div *ngIf="errorMessage" class="error">
     {{ errorMessage }}
   </div>
+
+  <div>
+    <p>You don't have an account?  <a routerLink="/signup">Sign up</a></p>
+  </div>
 </form>
+ 
+</div>

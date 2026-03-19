@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth/auth';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
@@ -29,7 +29,7 @@ export class Login implements OnInit {
       const { email, password } = this.loginForm.value;
       this.auth.login(email!, password!).subscribe({
         next: (res) => {
-          if (res.success) {
+          if (res.code === 0) {
             this.auth.setUser(email!);
           } else {
             alert('Invalid credentials');

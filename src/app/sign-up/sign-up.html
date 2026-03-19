@@ -1,0 +1,13 @@
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+  <h2>Create Account</h2>
+
+  <input type="text" formControlName="firstName" placeholder="First Name" />
+  <input type="text" formControlName="lastName" placeholder="Last Name" />
+  <input type="email" formControlName="email" placeholder="Email" />
+  <input type="text" formControlName="phoneNumber" placeholder="Phone Number" />
+  <input type="password" formControlName="password" placeholder="Password" />
+
+  <button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
+
+  <div class="form-footer">Already have an account? <a routerLink="/login">Login</a></div>
+</form>
