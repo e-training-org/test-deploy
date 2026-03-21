@@ -35,14 +35,28 @@ export class ProductService {
   }
 
   getProductById(id: string): Observable<IProductList> {
+    const token = localStorage.getItem('authToken');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token?.trim()}`,
+      'Content-Type': 'application/json',
+    });
+
     return this.http
-      .get<IProductList>(`${this.apiUrl}/${id}`)
+      .get<IProductList>(`${this.apiUrl}/${id}`, { headers })
       .pipe(catchError(this.errorHandler.handleError));
   }
 
   createProduct(product: IProductList): Observable<IProductList> {
+    const token = localStorage.getItem('authToken');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
     return this.http
-      .post<IProductList>(this.apiUrl, product)
+      .post<IProductList>(this.apiUrl, product, { headers })
       .pipe(catchError(this.errorHandler.handleError));
   }
 }

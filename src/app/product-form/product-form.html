@@ -65,19 +65,19 @@
 
         <!-- Image URL Field -->
         <label>Image URL</label>
-        <input type="text" formControlName="imageUrl" />
+        <input type="text" formControlName="image_url" />
 
-        <div class="error" *ngIf="productForm.get('imageUrl')?.touched && productForm.get('imageUrl')?.invalid">
-            <span *ngIf="productForm.get('imageUrl')?.errors?.['required']">
+        <div class="error" *ngIf="productForm.get('image_url')?.touched && productForm.get('image_url')?.invalid">
+            <span *ngIf="productForm.get('image_url')?.errors?.['required']">
                 Image URL is required
             </span>
-            <span *ngIf="productForm.get('imageUrl')?.errors?.['pattern']">
+            <span *ngIf="productForm.get('image_url')?.errors?.['pattern']">
                 Must be a valid URL (http or https)
             </span>
         </div>
 
-        <div *ngIf="productForm.get('imageUrl')?.valid">
-            <img [src]="productForm.get('imageUrl')?.value" (error)="imageError = true" *ngIf="!imageError"
+        <div *ngIf="productForm.get('image_url')?.valid">
+            <img [src]="productForm.get('image_url')?.value" (error)="imageError = true" *ngIf="!imageError"
                 [alt]="productForm.get('name')?.value" width="150" />
         </div>
 
