@@ -9,7 +9,7 @@
        *ngFor="let product of (data$ | async)"
        (click)="productDetails(product)">
     <div class="product-image-wrapper">
-      <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+      <img [src]="product.image_url" [alt]="product.name" class="product-image">
       <div class="stock-badge"
            [class.in-stock]="product.instock"
            [class.out-of-stock]="!product.instock">

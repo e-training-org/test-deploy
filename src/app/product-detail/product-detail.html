@@ -17,7 +17,7 @@
 
     <div class="product-detail-card">
         <div class="image-section">
-            <img [src]="selectedProduct()?.imageUrl" [alt]="selectedProduct()?.name" class="detail-image" />
+            <img [src]="selectedProduct()?.image_url" [alt]="selectedProduct()?.name" class="detail-image" />
             <div class="stock-indicator" [class.in-stock]="selectedProduct()?.instock" [class.out-of-stock]="!selectedProduct()?.instock">
                 <span class="stock-icon">{{ selectedProduct()?.instock ? '✓' : '✕' }}</span>
                 <span class="stock-text">{{ selectedProduct()?.instock ? 'In Stock' : 'Out of Stock' }}</span>
