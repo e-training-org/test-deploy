@@ -56,9 +56,16 @@
 
         <!-- Category Field -->
         <label>Category</label>
-        <input type="text" formControlName="category" />
 
-        <div class="error" *ngIf="productForm.get('category')?.touched && productForm.get('category')?.invalid">
+        <app-category-select
+            [selectedCategoryId]="productForm.get('categoryId')?.value"
+            (selectedCategoryIdChange)="
+                productForm.get('categoryId')?.setValue($event);
+                productForm.get('categoryId')?.markAsTouched();
+            ">
+        </app-category-select>
+
+        <div class="error" *ngIf="productForm.get('categoryId')?.touched && productForm.get('categoryId')?.invalid">
             Category is required
         </div>
 

@@ -1,0 +1,11 @@
+<select
+  [ngModel]="selectedCategoryId"
+  (ngModelChange)="onChange($event)"
+  required
+>
+  <option value="" disabled>Select a category</option>
+
+  <option *ngFor="let category of categories" [ngValue]="category.id">
+    {{ category.name }}
+  </option>
+</select>

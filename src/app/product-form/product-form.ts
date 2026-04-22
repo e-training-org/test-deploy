@@ -115,8 +115,6 @@
 
 // }
 
-
-
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -125,10 +123,11 @@ import { CommonModule } from '@angular/common';
 import { State } from '../services/state/state';
 import { catchError } from 'rxjs';
 import { ErrorHandler } from '../services/error-handling/error-handler';
+import { CategoryComponent } from '../category/category';
 
 @Component({
   selector: 'app-product-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, CategoryComponent],
   templateUrl: './product-form.html',
   styleUrls: ['./product-form.css'],
 })
@@ -149,7 +148,7 @@ export class ProductForm implements OnInit {
     private router: Router,
     private productService: ProductService,
     private state: State,
-    private errorHandler: ErrorHandler
+    private errorHandler: ErrorHandler,
   ) {}
 
   ngOnInit(): void {
@@ -162,11 +161,11 @@ export class ProductForm implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
       price: [null, [Validators.required, Validators.min(50)]],
-      category: ['', Validators.required],
+      categoryId: [null, Validators.required],
       image_url: ['', [Validators.required, Validators.pattern('https?://.+')]],
       instock: [false],
       rating: [0, [Validators.min(0), Validators.max(5)]],
-      properties: this.fb.array([this.createProperty()])
+      properties: this.fb.array([this.createProperty()]),
     });
   }
 
@@ -179,7 +178,7 @@ export class ProductForm implements OnInit {
   createProperty(): FormGroup {
     return this.fb.group({
       color: ['', Validators.required],
-      weight: ['', Validators.required]
+      weight: ['', Validators.required],
     });
   }
 
@@ -206,7 +205,7 @@ export class ProductForm implements OnInit {
     this.state.setLoading(true);
     this.state.setError(null);
 
-    const raw = this.productForm.value;
+    const raw: any = this.productForm.getRawValue();
 
     const product = {
       ...raw,
@@ -216,22 +215,25 @@ export class ProductForm implements OnInit {
       properties: raw.properties?.map((p: any) => ({ key: p.color, value: p.weight })),
     };
 
-    this.productService.createProduct(product).pipe(
-      catchError(err => {
-        this.state.setLoading(false);
-        this.state.setError(err);
-        throw err;
-      })
-    ).subscribe({
-      next: (newProduct) => {
-        this.state.addProduct(newProduct);
-        this.state.setLoading(false);
-        this.productForm.reset();
-        this.properties.clear();
-        this.addProperty();
-        this.router.navigate(['']);
-      },
-      error: () => {}
-    });
+    this.productService
+      .createProduct(product)
+      .pipe(
+        catchError((err) => {
+          this.state.setLoading(false);
+          this.state.setError(err?.error?.message || 'Something went wrong');
+          return [];
+        }),
+      )
+      .subscribe({
+        next: (newProduct) => {
+          this.state.addProduct(newProduct);
+          this.state.setLoading(false);
+          this.productForm.reset();
+          this.properties.clear();
+          this.addProperty();
+          this.router.navigate(['']);
+        },
+        error: () => {},
+      });
   }
 }
