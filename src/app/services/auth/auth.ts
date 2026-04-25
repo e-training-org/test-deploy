@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { BehaviorSubject, of, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { ErrorHandler } from '../error-handling/error-handler';
 import { environment } from '../../../environments/environment';
+import { StorageService } from '../storage';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -18,9 +19,10 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private storageService: StorageService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      this.authState.next(!!localStorage.getItem('userEmail'));
+      this.authState.next(!!this.storageService.get('authToken'));
     }
   }
 
@@ -30,7 +32,7 @@ export class AuthService {
       .pipe(
         tap((res) => {
           if (res.access_token) {
-            localStorage.setItem('authToken', res.access_token);
+            this.storageService.set('authToken', res.access_token);
             this.authState.next(true);
             this.router.navigate(['']);
           }
@@ -55,7 +57,7 @@ export class AuthService {
         tap((res) => {
           console.log('Response', res);
           if (res.code === 0) {
-            localStorage.setItem('userEmail', data.email);
+            this.storageService.set('userEmail', data.email);
             this.authState.next(true);
             this.router.navigate(['/login']);
           }
@@ -68,27 +70,23 @@ export class AuthService {
   }
 
   setUser(email: string) {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('userEmail', email);
-      this.authState.next(true);
-      this.router.navigate(['']);
-    }
+    this.storageService.set('userEmail', email);
+    this.authState.next(true);
+    this.router.navigate(['']);
   }
 
   logout() {
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('authToken');
+    this.storageService.remove('userEmail');
+    this.storageService.remove('authToken');
     this.authState.next(false);
     this.router.navigate(['/login']);
   }
-}
 
   isLoggedIn(): boolean {
-    return isPlatformBrowser(this.platformId) && !!localStorage.getItem('userEmail');
+      return !!this.storageService.get('authToken');
   }
 
   getCurrentUser(): string | null {
-    return isPlatformBrowser(this.platformId) ? localStorage.getItem('userEmail') : null;
+   return this.storageService.get('userEmail');
   }
 }

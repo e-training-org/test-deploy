@@ -1,4 +1,4 @@
-<select
+<!-- <select
   [ngModel]="selectedCategoryId"
   (ngModelChange)="onChange($event)"
   required
@@ -6,6 +6,12 @@
   <option value="" disabled>Select a category</option>
 
   <option *ngFor="let category of categories" [ngValue]="category.id">
+    {{ category.name }}
+  </option>
+</select> -->
+
+<select [(ngModel)]="selectedCategoryId" (ngModelChange)="onChange($event)">
+  <option *ngFor="let category of categories$ | async" [value]="category.id">
     {{ category.name }}
   </option>
 </select>

@@ -3,7 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IProductList } from '../../shared/interfaces/products.interface';
 import { Navbar } from '../../navbar/navbar';
-import { ProductService } from '../services/product/product';
+import { ProductService } from '../services/product';
 import { ProductList } from '../../product/product-list';
 import { Observable } from 'rxjs';
 import { State } from '../services/state/state';

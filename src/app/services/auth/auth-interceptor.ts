@@ -1,15 +1,23 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const email = localStorage.getItem('userEmail');
+  const platformId = inject(PLATFORM_ID);
 
-  if (email && req.url.includes('/products')) {
-    const clonedReq = req.clone({
+  let token: string | null = null;
+
+  if (isPlatformBrowser(platformId)) {
+    token = localStorage.getItem('authToken');
+  }
+
+  if (token) {
+    const cloned = req.clone({
       setHeaders: {
-        'X-User-Email': email
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
-    return next(clonedReq);
+    return next(cloned);
   }
 
   return next(req);

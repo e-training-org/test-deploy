@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, NgZone, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-import { ProductService } from '../services/product/product';
+import { ProductService } from '../services/product';
 import { IProductList } from '../../shared/interfaces/products.interface';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../../navbar/navbar';
