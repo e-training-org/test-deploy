@@ -39,16 +39,16 @@ export class Home implements OnInit {
     this.error$ = this.state.error$;
 
     this.state.setLoading(true);
-    // this.productService.getAllProducts().subscribe({
-    //   next: products => {
-    //     this.state.setProducts(products);
-    //     this.state.setLoading(false);
-    //   },
-    //   error: err => {
-    //     this.state.setError(err);
-    //     this.state.setLoading(false);
-    //   }
-    // });
+    this.productService.getAllProducts().subscribe({
+      next: (products) => {
+        this.state.setProducts(products);
+        this.state.setLoading(false);
+      },
+      error: (err) => {
+        this.state.setError(err);
+        this.state.setLoading(false);
+      },
+    });
   }
 
   onProductSelected(product: IProductList): void {
