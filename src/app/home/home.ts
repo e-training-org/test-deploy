@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, Input, OnInit, signal, PLATFORM_ID, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { IProductList } from '../../shared/interfaces/products.interface';
 import { Navbar } from '../../navbar/navbar';
 import { ProductService } from '../services/product';
@@ -18,7 +18,7 @@ import { map } from 'rxjs/operators';
 })
 export class Home implements OnInit {
   protected readonly title = signal('fashion-store');
-
+  platformId = inject(PLATFORM_ID);
   @Input() data: IProductList[] = [];
 
   products$!: Observable<IProductList[]>;
@@ -38,17 +38,19 @@ export class Home implements OnInit {
     this.loading$ = this.state.loading$;
     this.error$ = this.state.error$;
 
-    this.state.setLoading(true);
-    this.productService.getAllProducts().subscribe({
-      next: (products) => {
-        this.state.setProducts(products);
-        this.state.setLoading(false);
-      },
-      error: (err) => {
-        this.state.setError(err);
-        this.state.setLoading(false);
-      },
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.state.setLoading(true);
+      this.productService.getAllProducts().subscribe({
+        next: (products) => {
+          this.state.setProducts(products);
+          this.state.setLoading(false);
+        },
+        error: (err) => {
+          this.state.setError(err);
+          this.state.setLoading(false);
+        },
+      });
+    }
   }
 
   onProductSelected(product: IProductList): void {
